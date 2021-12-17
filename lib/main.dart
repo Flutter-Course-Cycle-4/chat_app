@@ -1,9 +1,20 @@
+import 'package:chat_app/controllers/auth_provider.dart';
+import 'package:chat_app/views/screens/authentication/auth_screen.dart';
 import 'package:chat_app/views/screens/authentication/login_screen.dart';
 import 'package:chat_app/views/screens/authentication/register_screen.dart';
+import 'package:chat_app/views/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => AuthProvider(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +33,22 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.transparent,
       ),
-      home: const RegisterScreen(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.userChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              );
+            }
+            if (snapshot.data != null) {
+              return HomeScreen();
+            } else {
+              return AuthScreen();
+            }
+          }),
     );
   }
 }
