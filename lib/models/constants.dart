@@ -8,4 +8,10 @@ class Constants {
       fit: BoxFit.fill,
     ),
   );
+
+  static getCategoryImage(String category) {
+    return AssetImage(
+      'assets/images/${category == 'Sports' ? 'sports' : category == 'Movies' ? 'movies' : 'music'}.png',
+    );
+  }
 }
