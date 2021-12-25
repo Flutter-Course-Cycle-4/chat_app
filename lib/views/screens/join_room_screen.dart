@@ -1,4 +1,5 @@
 //import 'package:chat_app/controllers/rooms_provider.dart';
+import 'package:chat_app/controllers/rooms_provider.dart';
 import 'package:chat_app/models/constants.dart';
 import 'package:chat_app/models/room.dart';
 //import 'package:chat_app/views/screens/chat_screen.dart';
@@ -16,15 +17,16 @@ class JoinRoomScreen extends StatefulWidget {
 
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   bool joiningRoom = false;
-  /*void joinRoom() async {
+  void joinRoom() async {
     setState(() {
       joiningRoom = true;
     });
     String? error =
         await Provider.of<RoomsProvider>(context, listen: false).joinRoom(room);
     if (error == null) {
-      Navigator.of(context)
-          .pushReplacementNamed(ChatScreen.routeName, arguments: room);
+      /*Navigator.of(context)
+          .pushReplacementNamed(ChatScreen.routeName, arguments: room);*/
+      Navigator.pop(context);
     } else {
       setState(() {
         joiningRoom = false;
@@ -36,7 +38,7 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
         ),
       );
     }
-  }*/
+  }
 
   late Room room;
   @override
@@ -119,7 +121,7 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
                                 shape: const StadiumBorder(),
                                 primary: const Color(0xFF3598DB),
                               ),
-                              onPressed: () {}, //joinRoom,
+                              onPressed: joinRoom,
                               child: const Text('Join'),
                             ),
                           ),

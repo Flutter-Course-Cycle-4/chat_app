@@ -2,18 +2,25 @@ import 'package:chat_app/controllers/auth_provider.dart';
 import 'package:chat_app/views/screens/authentication/auth_screen.dart';
 import 'package:chat_app/views/screens/authentication/login_screen.dart';
 import 'package:chat_app/views/screens/authentication/register_screen.dart';
+import 'package:chat_app/views/screens/chat_screen.dart';
+import 'package:chat_app/views/screens/create_room.dart';
 import 'package:chat_app/views/screens/home_screen.dart';
+import 'package:chat_app/views/screens/join_room_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/rooms_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    ChangeNotifierProvider(
-        create: (context) => AuthProvider(), child: const MyApp()),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => AuthProvider()),
+      ChangeNotifierProvider(create: (context) => RoomsProvider()),
+    ], child: const MyApp()),
   );
 }
 
@@ -33,6 +40,11 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.transparent,
       ),
+      routes: {
+        CreateRoom.routeName: (context) => const CreateRoom(),
+        JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
+        ChatScreen.routeName: (context) => ChatScreen(),
+      },
       home: StreamBuilder(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, snapshot) {

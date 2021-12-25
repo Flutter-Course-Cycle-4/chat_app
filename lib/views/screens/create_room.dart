@@ -1,4 +1,5 @@
 //import 'package:chat_app/controllers/rooms_provider.dart';
+import 'package:chat_app/controllers/rooms_provider.dart';
 import 'package:chat_app/models/constants.dart';
 import 'package:chat_app/models/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class _CreateRoomState extends State<CreateRoom> {
       description = TextEditingController();
   String? category;
   bool creatingRoom = false;
-  /*void submitNewRoom() async {
+  void submitNewRoom() async {
     if (form.currentState!.validate()) {
       RoomData roomData = RoomData(
         name.text,
@@ -45,7 +46,7 @@ class _CreateRoomState extends State<CreateRoom> {
       }
     }
   }
-*/
+
   @override
   void dispose() {
     name.dispose();
@@ -211,7 +212,7 @@ class _CreateRoomState extends State<CreateRoom> {
                                 shape: const StadiumBorder(),
                                 primary: const Color(0xFF3598DB),
                               ),
-                              onPressed: () {}, //submitNewRoom,
+                              onPressed: submitNewRoom,
                               child: const Text('Create'),
                             ),
                           ),

@@ -1,6 +1,8 @@
 //import 'package:chat_app/controllers/rooms_provider.dart';
+import 'package:chat_app/controllers/rooms_provider.dart';
 import 'package:chat_app/models/constants.dart';
 import 'package:chat_app/models/room.dart';
+import 'package:chat_app/views/screens/chat_screen.dart';
 //import 'package:chat_app/views/screens/chat_screen.dart';
 import 'package:chat_app/views/screens/join_room_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +26,14 @@ class RoomsGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            /*if (!Provider.of<RoomsProvider>(context, listen: false)
-                .isMember(rooms[index])) {
+            if (!Provider.of<RoomsProvider>(context, listen: false)
+                .joinedTheRoom(rooms[index])) {
               Navigator.of(context)
                   .pushNamed(JoinRoomScreen.routeName, arguments: rooms[index]);
             } else {
               Navigator.of(context)
                   .pushNamed(ChatScreen.routeName, arguments: rooms[index]);
-            }*/
+            }
           },
           child: Card(
             shape: RoundedRectangleBorder(
