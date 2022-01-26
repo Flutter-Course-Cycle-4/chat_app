@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:chat_app/models/message.dart';
 import 'package:chat_app/models/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class RoomsProvider with ChangeNotifier {
@@ -82,5 +85,13 @@ class RoomsProvider with ChangeNotifier {
       print(error);
       return 'Error has occurred please try again later';
     }
+  }
+
+  Future<String> uploadImage(String path, String roomId) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final imageRef =
+        FirebaseStorage.instance.ref('$roomId/$userId${DateTime.now()}');
+    final image = await imageRef.putFile(File(path));
+    return image.ref.getDownloadURL();
   }
 }

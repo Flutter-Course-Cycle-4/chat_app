@@ -1,15 +1,18 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:chat_app/models/message.dart';
+import 'package:chat_app/views/screens/show_image_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ChatBubble extends StatelessWidget {
   final Message message;
-  final bool sentByMe;
+  final bool sentByMe, txtMessage;
   ChatBubble(this.message, {Key? key})
       : sentByMe = message.senderId == FirebaseAuth.instance.currentUser!.uid,
+        txtMessage = message.type == 'text',
         super(key: key);
 
   @override
@@ -21,7 +24,7 @@ class ChatBubble extends StatelessWidget {
             sentByMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(message.senderName),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
             child: Row(
               mainAxisAlignment:
@@ -40,18 +43,59 @@ class ChatBubble extends StatelessWidget {
                     width: 10,
                   ),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: sentByMe ? Colors.blue[400] : Colors.grey,
-                      borderRadius: BorderRadius.circular(20).subtract(
-                        BorderRadius.only(
-                          bottomRight: Radius.circular(sentByMe ? 20 : 0),
-                          bottomLeft: Radius.circular(sentByMe ? 0 : 20),
-                        ),
-                      ),
-                    ),
-                    child: Text(message.message),
+                  child: InkWell(
+                    onTap: txtMessage
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ShowImageScreen(message.message),
+                              ),
+                            );
+                          },
+                    child: txtMessage
+                        ? Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: sentByMe ? Colors.blue[400] : Colors.grey,
+                              borderRadius: BorderRadius.circular(20).subtract(
+                                BorderRadius.only(
+                                  bottomRight:
+                                      Radius.circular(sentByMe ? 20 : 0),
+                                  bottomLeft:
+                                      Radius.circular(sentByMe ? 0 : 20),
+                                ),
+                              ),
+                            ),
+                            child: Text(message.message),
+                          )
+                        : Hero(
+                            tag: message.message,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color:
+                                    sentByMe ? Colors.blue[400] : Colors.grey,
+                                borderRadius:
+                                    BorderRadius.circular(20).subtract(
+                                  BorderRadius.only(
+                                    bottomRight:
+                                        Radius.circular(sentByMe ? 20 : 0),
+                                    bottomLeft:
+                                        Radius.circular(sentByMe ? 0 : 20),
+                                  ),
+                                ),
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                    message.message,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 if (!sentByMe)
